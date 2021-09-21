@@ -3,4 +3,7 @@ module.exports = {
         host: "testspacecompany.exileng.com",
         public: "testspacecompany.exileng.com",
     },
-}
+  publicPath: process.env.NODE_ENV ==='production'
+  ? '/NGSpaceCompany/'
+  : '/'
+};

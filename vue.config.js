@@ -1,8 +1,8 @@
 module.exports = {
-    devServer: {
-        host: "testspacecompany.exileng.com",
-        public: "testspacecompany.exileng.com",
-    },
+  devServer: {
+    host: "localhost",
+    public: "localhost",
+  },
   publicPath: process.env.NODE_ENV ==='production'
   ? '/NGSpaceCompany/'
   : '/'

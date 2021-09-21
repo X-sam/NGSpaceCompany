@@ -5,12 +5,7 @@
         <h1 class="text-light">NG Space Company</h1>
       </div>
       <div class="col text-center">
-        <img
-          id="loadLogo"
-          style="width: 25%; height: auto"
-          src="https://ngspacecompany.exileng.com/whiteLogo.png"
-          alt="Game logo"
-        />
+        <Logo id="loadLogo" width="25%" height="100%" white="true" />
       </div>
       <div class="col text-center">
         <h5 class="text-light">Reticulating Splines...</h5>
@@ -22,12 +17,7 @@
     <div id="sidebar" :class="{ open: sidebarOpen }" role="navigation">
       <top-header class="px-2">
         <div class="col-auto">
-          <img
-            src="https://ngspacecompany.exileng.com/whiteLogo.png"
-            width="42"
-            height="42"
-            alt="Game logo"
-          />
+          <Logo width="42" height="42" white="true" />
         </div>
 
         <div class="col text-truncate px-0">
@@ -631,12 +621,7 @@
             >
               <i class="fas fa-fw fa-certificate text-success small"></i>
             </div>
-            <img
-              src="https://ngspacecompany.exileng.com/whiteLogo.png"
-              width="36"
-              height="36"
-              alt="Game logo"
-            />
+            <Logo width="36" height="36" white="true" />
           </button>
         </div>
 
@@ -4719,6 +4704,7 @@ import Star from "./components/Star.vue";
 import Fleet from "./components/Fleet.vue";
 import CalcSegment from "./components/CalcSegment.vue";
 import CalcBuilding from "./components/CalcBuilding.vue";
+import Logo from "./components/Logo.vue";
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
@@ -4744,6 +4730,7 @@ export default {
     fleet: Fleet,
     "calc-segment": CalcSegment,
     "calc-building": CalcBuilding,
+    Logo,
   },
   data() {
     return {

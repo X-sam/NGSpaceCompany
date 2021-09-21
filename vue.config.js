@@ -3,7 +3,5 @@ module.exports = {
     host: "localhost",
     public: "localhost",
   },
-  publicPath: process.env.NODE_ENV ==='production'
-  ? '/NGSpaceCompany/'
-  : '/'
+  publicPath: process.env.NODE_ENV === "production" ? "/NGSpaceCompany/" : "/",
 };

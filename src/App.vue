@@ -3622,6 +3622,9 @@
             </card>
             <card id="importExport" checked="true">
               <div class="col-12">
+                <google-login />
+              </div>
+              <div class="col-12">
                 <div class="row g-1">
                   <div class="col-auto">
                     <button class="btn" @click="exportData()">
@@ -4705,6 +4708,7 @@ import Fleet from "./components/Fleet.vue";
 import CalcSegment from "./components/CalcSegment.vue";
 import CalcBuilding from "./components/CalcBuilding.vue";
 import Logo from "./components/Logo.vue";
+import GoogleLogin from "./components/GoogleLogin.vue";
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
@@ -4730,7 +4734,7 @@ export default {
     fleet: Fleet,
     "calc-segment": CalcSegment,
     "calc-building": CalcBuilding,
-    Logo,
+    "google-login": GoogleLogin,
   },
   data() {
     return {
@@ -4874,6 +4878,7 @@ export default {
       "setDisplayPinnedItems",
       "setDisplayDoneTechs",
       "setDisplayRoadmap",
+      "initializeGapi",
     ]),
     ...mapActions([
       "initialize",
@@ -4908,6 +4913,7 @@ export default {
     start() {
       this.initialize();
       this.load();
+      this.initializeGapi(this.$gapi);
 
       this.changeLocale(this.locale);
       this.newCompanyName = this.companyName;

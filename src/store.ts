@@ -3,6 +3,8 @@
 import { createStore } from "vuex";
 import LZString from "lz-string";
 
+import drive, { DriveState } from "./drive";
+
 /******************************************************************************/
 const pascal = function (n) {
   let add = 1,
@@ -530,6 +532,9 @@ export const store = createStore({
     },
     setDisplayNanoswarmShortcut(state, payload) {
       state.displayNanoswarmShortcut = payload;
+    },
+    toggleSaveToCloud(state) {
+      state.saveToCloud = !state.saveToCloud;
     },
     /*--------------------------------------------------------------------*/
     setActivePane(state, payload) {
@@ -11648,6 +11653,9 @@ export const store = createStore({
       const text = JSON.stringify(saveddata);
       const compressed = LZString.compressToBase64(text);
       localStorage.setItem("ngsavecrypted", compressed);
+      if (state.saveToCloud && state.gapiConnected) {
+        () => {};
+      }
     },
     /*--------------------------------------------------------------------*/
 
@@ -13099,6 +13107,9 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
   },
+  modules: { drive },
 });
 
-export type MainStore = ReturnType<typeof makeState>;
+export interface MainStore extends ReturnType<typeof makeState> {
+  drive: DriveState;
+}

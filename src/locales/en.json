@@ -97,6 +97,7 @@
     "copy": "Copy To Clipboard",
     "importExport_desc": "Copy and paste this onto a file somewhere so that you can import it into the game at a later date. You can also use this to create multiple 'savefiles' of the game by storing multiple instances separately.",
     "notifications": "Displaying",
+    "saveToCloud": "Use Saves in Google Drive",
     "showRoadmap": "Display Overlord roadmap",
     "showPinnedItems": "Activate and display pinned panes",
     "showDoneTechs": "Show researched techs",

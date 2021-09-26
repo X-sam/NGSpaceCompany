@@ -14,6 +14,10 @@
     "noImplicitAny": false,
     "types": [
       "webpack-env",
+      "gapi",
+      "gapi.auth2" ,
+      "gapi.client",
+      "gapi.client.drive"
     ],
     "paths": {
       "@/*": [

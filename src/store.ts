@@ -3,6 +3,8 @@
 import { createStore } from "vuex";
 import LZString from "lz-string";
 
+import { maxBuildable } from "./helpers/maxBuildable";
+
 /******************************************************************************/
 const pascal = function (n) {
   let add = 1,
@@ -124,6 +126,7 @@ const makeState = function () {
       count: {},
     },
     /*----------------------------------------------------------------*/
+    maxing: false,
   };
 };
 
@@ -12506,6 +12509,17 @@ export const store = createStore({
           }
         } else break;
       }
+    },
+    async buildMaxSwarms({ state, dispatch }, payload) {
+      state.maxing = true;
+      while (
+        state.maxing &&
+        maxBuildable(state.data, state.data["segment"].costs, "segment") > 100
+      ) {
+        await dispatch("build", { id: "segment", upto: 100 });
+        await dispatch("build", { id: "dysonT2", count: 1 });
+      }
+      state.maxing = false;
     },
     /*--------------------------------------------------------------------*/
     destroy({ state, commit }, payload) {

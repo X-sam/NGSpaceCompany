@@ -1141,6 +1141,8 @@
     
     "btnDysonT1": "= 50 + Ring",
     "btnDysonT2": "= 100 + Swarm",
+    "btnDysonT2Max": "Max 100 + Swarms",
+    "btnDysonT2MaxLoad": "Stop Maxing 100 + Swarms",
     "btnDysonT3": "= 250 + Sphere",
     
     "toastAchievement_title": "New Achievement",

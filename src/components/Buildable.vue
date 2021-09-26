@@ -477,6 +477,27 @@
                   <button
                     class="btn"
                     @click="
+                      if (maxing) {
+                        maxing = false;
+                      } else if (!maxing) {
+                        buildMaxSwarms();
+                      }
+                    "
+                  >
+                    <span
+                      v-if="maxing"
+                      class="spinner-grow spinner-grow-sm"
+                      style="height: 0.8rem"
+                      role="status"
+                    ></span>
+                    <span v-if="!maxing"> {{ $t("btnDysonT2Max") }}</span>
+                    <span v-if="maxing"> {{ $t("btnDysonT2MaxLoad") }}</span>
+                  </button>
+                </div>
+                <div v-if="id == 'dysonT2'" class="col-auto">
+                  <button
+                    class="btn"
+                    @click="
                       build({ id: 'segment', upto: 100 });
                       build({ id: 'dysonT2', count: 1 });
                     "
@@ -572,14 +593,19 @@ export default {
     this.automated = this.data[this.id].auto ? this.data[this.id].auto : null;
   },
   computed: {
-    ...mapState(["data", "displayLockedItems", "displayNanoswarmShortcut"]),
+    ...mapState([
+      "data",
+      "displayLockedItems",
+      "displayNanoswarmShortcut",
+      "maxing",
+    ]),
     ...mapGetters(["isCollapsed"]),
     showNanoswarmShortcut: function () {
       return this.displayNanoswarmShortcut;
     },
   },
   methods: {
-    ...mapActions(["build", "destroy", "switchNano"]),
+    ...mapActions(["build", "destroy", "switchNano", "buildMaxSwarms"]),
     ...mapMutations([
       "toggleCollapsed",
       "setAutoStorageUpgrade",

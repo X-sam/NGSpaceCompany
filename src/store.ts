@@ -1,12 +1,13 @@
-import { createStore } from "vuex";
+// @ts-nocheck
 
+import { createStore } from "vuex";
 import LZString from "lz-string";
 
 /******************************************************************************/
 const pascal = function (n) {
-  var add = 1,
+  let add = 1,
     init = 0;
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     init += add;
     add += 1;
   }
@@ -14,10 +15,10 @@ const pascal = function (n) {
 };
 /*----------------------------------------------------------------------------*/
 const fibonacci = function (n) {
-  var a = 0,
+  let a = 0,
     b = 1,
     f = 1;
-  for (var i = 2; i <= n; i++) {
+  for (let i = 2; i <= n; i++) {
     f = a + b;
     a = b;
     b = f;
@@ -26,10 +27,10 @@ const fibonacci = function (n) {
 };
 /*----------------------------------------------------------------------------*/
 const threat = function (stats) {
-  var threshholds = [
+  const threshholds = [
     320, 800, 1440, 2240, 3200, 4320, 5600, 7040, 8640, 10400, 12320, 14400,
   ];
-  var level = 0;
+  let level = 0;
   for (let i = 0; i < threshholds.length; i++) {
     if (stats.power * stats.speed >= threshholds[i]) level += 1;
     else continue;
@@ -38,93 +39,178 @@ const threat = function (stats) {
 };
 /******************************************************************************/
 
-export const store = createStore({
-  state() {
-    return {
-      /*----------------------------------------------------------------*/
-      data: {},
-      version: "1.0",
-      /*----------------------------------------------------------------*/
-      stars: [],
-      ships: [],
-      resources: [],
-      producers: [],
-      achievements: [],
-      storageUpgrades: [],
-      /*----------------------------------------------------------------*/
-      machineT1: [],
-      machineT2: [],
-      machineT3: [],
-      machineT4: [],
-      machineT5: [],
-      machineT6: [],
-      /*----------------------------------------------------------------*/
-      resAchievements: [],
-      prodAchievements: [],
-      /*----------------------------------------------------------------*/
-      storagePrice: 1,
-      storageExcess: 1,
-      titanSwapingCount: 0,
-      /*----------------------------------------------------------------*/
-      lastUpdateTime: new Date().getTime(),
-      /*----------------------------------------------------------------*/
-      rank: { level: 1, xpNeeded: 0, xpLeft: 0, percent: 0, current: 0 },
-      /*----------------------------------------------------------------*/
-      autoSaveInterval: 30 * 1000,
-      timeSinceAutoSave: 0,
-      /*----------------------------------------------------------------*/
-      locale: "en",
-      activePane: "metalPane",
-      companyName: "NG Space",
-      notifications: [],
-      newAchievement: false,
-      notifAutoSave: true,
-      notifAchievement: true,
-      displayLockedItems: false,
-      displayPinnedItems: false,
-      displayDoneTechs: true,
-      displayRoadmap: true,
-      displayEmcShortcut: false,
-      displayNanoswarmShortcut: false,
-      collapsed: [],
-      pinned: [],
-      /*----------------------------------------------------------------*/
-      fleet: { power: 0, defense: 0, speed: 0 },
-      activeFleet: { power: 0, defense: 0, speed: 0 },
-      /*----------------------------------------------------------------*/
-      username: null,
-      token: null,
-      /*----------------------------------------------------------------*/
-      emcAmount: "max",
-      autoResource: null,
-      autoEmcInterval: 1 * 1000,
-      timeSinceAutoEmc: 0,
-      /*----------------------------------------------------------------*/
-      stats: {
-        startDate: new Date().getTime(),
-        lastEnlightenDate: new Date().getTime(),
-        enlightenCount: 0,
-        allTimeUltrite: 0,
-        lastRebirthDate: new Date().getTime(),
-        rebirthCount: 0,
-        allTimeDarkmatter: 0,
-        manualGain: { current: 0, allTime: 0 },
-        machineT1: { current: 0, allTime: 0 },
-        machineT2: { current: 0, allTime: 0 },
-        machineT3: { current: 0, allTime: 0 },
-        machineT4: { current: 0, allTime: 0 },
-        machineT5: { current: 0, allTime: 0 },
-        machineT6: { current: 0, allTime: 0 },
-        ships: { current: 0, allTime: 0 },
-        starOwned: { current: 0, allTime: 0 },
-      },
-      /*----------------------------------------------------------------*/
-      context: {
-        count: {},
-      },
-      /*----------------------------------------------------------------*/
-    };
+const makeState = function () {
+  return {
+    /*----------------------------------------------------------------*/
+    data: {},
+    version: "1.0",
+    /*----------------------------------------------------------------*/
+    stars: [],
+    ships: [],
+    resources: [],
+    producers: [],
+    achievements: [],
+    storageUpgrades: [],
+    /*----------------------------------------------------------------*/
+    machineT1: [],
+    machineT2: [],
+    machineT3: [],
+    machineT4: [],
+    machineT5: [],
+    machineT6: [],
+    /*----------------------------------------------------------------*/
+    resAchievements: [],
+    prodAchievements: [],
+    /*----------------------------------------------------------------*/
+    storagePrice: 1,
+    storageExcess: 1,
+    titanSwapingCount: 0,
+    /*----------------------------------------------------------------*/
+    lastUpdateTime: new Date().getTime(),
+    /*----------------------------------------------------------------*/
+    rank: { level: 1, xpNeeded: 0, xpLeft: 0, percent: 0, current: 0 },
+    /*----------------------------------------------------------------*/
+    autoSaveInterval: 30 * 1000,
+    timeSinceAutoSave: 0,
+    /*----------------------------------------------------------------*/
+    locale: "en",
+    activePane: "metalPane",
+    companyName: "NG Space",
+    notifications: [],
+    newAchievement: false,
+    notifAutoSave: true,
+    notifAchievement: true,
+    displayLockedItems: false,
+    displayPinnedItems: false,
+    displayDoneTechs: true,
+    displayRoadmap: true,
+    displayEmcShortcut: false,
+    displayNanoswarmShortcut: false,
+    saveToCloud: false,
+    collapsed: [],
+    pinned: [],
+    /*----------------------------------------------------------------*/
+    fleet: { power: 0, defense: 0, speed: 0 },
+    activeFleet: { power: 0, defense: 0, speed: 0 },
+    /*----------------------------------------------------------------*/
+    username: null,
+    token: null,
+    /*----------------------------------------------------------------*/
+    emcAmount: "max",
+    autoResource: null,
+    autoEmcInterval: 1 * 1000,
+    timeSinceAutoEmc: 0,
+    /*----------------------------------------------------------------*/
+    stats: {
+      startDate: new Date().getTime(),
+      lastEnlightenDate: new Date().getTime(),
+      enlightenCount: 0,
+      allTimeUltrite: 0,
+      lastRebirthDate: new Date().getTime(),
+      rebirthCount: 0,
+      allTimeDarkmatter: 0,
+      manualGain: { current: 0, allTime: 0 },
+      machineT1: { current: 0, allTime: 0 },
+      machineT2: { current: 0, allTime: 0 },
+      machineT3: { current: 0, allTime: 0 },
+      machineT4: { current: 0, allTime: 0 },
+      machineT5: { current: 0, allTime: 0 },
+      machineT6: { current: 0, allTime: 0 },
+      ships: { current: 0, allTime: 0 },
+      starOwned: { current: 0, allTime: 0 },
+    },
+    /*----------------------------------------------------------------*/
+    context: {
+      count: {},
+    },
+    /*----------------------------------------------------------------*/
+  };
+};
+
+const resources = [
+  "Meteorite",
+  "Carbon",
+  "Oil",
+  "Metal",
+  "Gem",
+  "Wood",
+  "Silicon",
+  "Uranium",
+  "Lava",
+  "Lunarite",
+  "Methane",
+  "Titanium",
+  "Gold",
+  "Silver",
+  "Hydrogen",
+  "Helium",
+  "Ice",
+  "Science",
+  "Fuel",
+];
+
+const achs = resources.reduce(
+  (acc, r) => ({
+    ...acc,
+    [`ach${r}`]: {
+      id: `ach${r}`,
+      icon: `${r.toLowerCase()}.png`,
+      data: r.toLowerCase(),
+      unlocked: false,
+      count: 0,
+      progress: 0,
+      brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
+    },
+  }),
+  {}
+);
+const producerTiers = {
+  Energy: ["T1", "T2", "T3", "T4", "T5", "T6"],
+  Plasma: ["T1", "T2", "T3", "T4"],
+  Meteorite: ["T1", "T2", "T3", "T4"],
+  Carbon: ["T1", "T2", "T3", "T4", "T5"],
+  Oil: ["T1", "T2", "T3", "T4", "T5"],
+  Metal: ["T1", "T2", "T3", "T4", "T5"],
+  Gem: ["T1", "T2", "T3", "T4", "T5"],
+  Wood: ["T1", "T2", "T3", "T4", "T5"],
+  Silicon: ["T1", "T2", "T3", "T4", "T5"],
+  Uranium: ["T1", "T2", "T3", "T4", "T5"],
+  Lava: ["T1", "T2", "T3", "T4", "T5"],
+  Lunarite: ["T1", "T2", "T3", "T4", "T5"],
+  Methane: ["T1", "T2", "T3", "T4", "T5"],
+  Titanium: ["T1", "T2", "T3", "T4", "T5"],
+  Gold: ["T1", "T2", "T3", "T4", "T5"],
+  Silver: ["T1", "T2", "T3", "T4", "T5"],
+  Hydrogen: ["T1", "T2", "T3", "T4", "T5"],
+  Helium: ["T1", "T2", "T3", "T4", "T5"],
+  Ice: ["T1", "T2", "T3", "T4", "T5"],
+  Science: ["T1", "T2", "T3", "T4", "T5"],
+  Fuel: ["T1", "T2", "T3"],
+  Dyson: ["T1", "T2", "T3"],
+};
+const tierMap = (resource, tier) => ({
+  [`ach${resource}${tier}`]: {
+    id: `ach${resource}${tier}`,
+    icon: `${resource.toLowerCase()}.png`,
+    data: `${resource.toLowerCase()}${tier}`,
+    unlocked: false,
+    count: 0,
+    progress: 0,
+    brackets: [5, 25, 75, 150, 250],
   },
+});
+const producerAchs = Object.keys(producerTiers).reduce(
+  (acc, r) => ({
+    ...acc,
+    ...producerTiers[r].reduce(
+      (acc, tier) => ({ ...acc, ...tierMap(r, tier) }),
+      {}
+    ),
+  }),
+  {}
+);
+export const store = createStore({
+  state: makeState,
   getters: {
     /*--------------------------------------------------------------------*/
     isNotif: (state) => (id) => {
@@ -156,13 +242,13 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getThreat: (state) => (id) => {
-      let item = state.data[id];
+      const item = state.data[id];
       return threat(item.stats);
     },
     /*--------------------------------------------------------------------*/
     getSpyChance: (state) => (id) => {
-      let item = state.data[id];
-      let t = threat(item.stats);
+      const item = state.data[id];
+      const t = threat(item.stats);
       return Math.min(
         100,
         (state.data["shipT1"].active / (t + 1)) * (20 / (item.spy + 1))
@@ -170,7 +256,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getFactionMultiplier: (state) => (id) => {
-      var op = state.data[id].opinion;
+      const op = state.data[id].opinion;
       if (op >= 20) return 0.5;
       else if (op >= -20 && op < 20) return 1;
       else if (op >= -60 && op < -20) return 2;
@@ -179,16 +265,16 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getInvadeChance: (state, getters) => (id) => {
-      let activeFleet = state.activeFleet;
+      const activeFleet = state.activeFleet;
       if (activeFleet.power != 0) {
-        let star = state.data[id];
+        const star = state.data[id];
 
-        let multi = getters.getFactionMultiplier(star.faction);
+        const multi = getters.getFactionMultiplier(star.faction);
         if (multi == 0) return "peace";
 
-        let damage =
+        const damage =
           (activeFleet.power / star.stats.defense) * multi * activeFleet.speed;
-        let starDamage =
+        const starDamage =
           ((star.stats.power * multi) / Math.max(activeFleet.defense, 1)) *
           star.stats.speed;
         if (damage > starDamage) return damage / starDamage - 0.5;
@@ -199,7 +285,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getDMWonders: (state) => {
-      var dm = 0;
+      let dm = 0;
       if (
         state.data["wonderPrecious1"].count > 0 &&
         state.data["wonderEnergetic1"].count > 0 &&
@@ -219,8 +305,8 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getDMSpheres: (state) => {
-      var dm = 0;
-      var sphere = state.data["dysonT3"];
+      let dm = 0;
+      const sphere = state.data["dysonT3"];
       if (sphere.count != 0) dm += 10;
       dm += sphere.count * 5;
       return dm;
@@ -259,38 +345,38 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getStarPower: (state, getters) => (id) => {
-      var star = state.data[id];
+      const star = state.data[id];
       if (star.spy <= 0) return "???";
 
-      var multi = getters.getFactionMultiplier(star.faction);
-      var val = Math.floor(star.stats.power * multi).toString();
-      var unknown = "";
-      for (var i = 0; i < val.length - (star.spy - 1); i++) {
+      const multi = getters.getFactionMultiplier(star.faction);
+      const val = Math.floor(star.stats.power * multi).toString();
+      let unknown = "";
+      for (let i = 0; i < val.length - (star.spy - 1); i++) {
         unknown += "?";
       }
       return val.substring(0, star.spy - 1) + unknown;
     },
     /*--------------------------------------------------------------------*/
     getStarDefense: (state, getters) => (id) => {
-      var star = state.data[id];
+      const star = state.data[id];
       if (star.spy <= 0) return "???";
 
-      var multi = getters.getFactionMultiplier(star.faction);
-      var val = Math.floor(star.stats.defense * multi).toString();
-      var unknown = "";
-      for (var i = 0; i < val.length - (star.spy - 1); i++) {
+      const multi = getters.getFactionMultiplier(star.faction);
+      const val = Math.floor(star.stats.defense * multi).toString();
+      let unknown = "";
+      for (let i = 0; i < val.length - (star.spy - 1); i++) {
         unknown += "?";
       }
       return val.substring(0, star.spy - 1) + unknown;
     },
     /*--------------------------------------------------------------------*/
     getStarSpeed: (state) => (id) => {
-      var star = state.data[id];
+      const star = state.data[id];
       if (star.spy <= 0) return "???";
 
-      var val = Math.floor(star.stats.speed).toString();
-      var unknown = "";
-      for (var i = 0; i < val.length - (star.spy - 1); i++) {
+      const val = Math.floor(star.stats.speed).toString();
+      let unknown = "";
+      for (let i = 0; i < val.length - (star.spy - 1); i++) {
         unknown += "?";
       }
       return val.substring(0, star.spy - 1) + unknown;
@@ -298,8 +384,8 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     getULStars: (state) => {
       let ownedStarCount = 0;
-      for (let i in state.stars) {
-        let star = state.stars[i];
+      for (const i in state.stars) {
+        const star = state.stars[i];
         if (star.status == "owned") ownedStarCount += 1;
         if (star.subStatus == "terraformed" || star.subStatus == "statued")
           ownedStarCount += 5;
@@ -316,8 +402,8 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     getULStatues: (state) => {
       let ul = 0;
-      for (let i in state.stars) {
-        let star = state.stars[i];
+      for (const i in state.stars) {
+        const star = state.stars[i];
         if (star.subStatus == "statued") ul += 5;
       }
 
@@ -332,7 +418,7 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     canBuild: (state) => (id) => {
       let canBuild = true;
-      let item = state.data[id];
+      const item = state.data[id];
 
       if ("max" in item && item.count >= item.max) canBuild = false;
 
@@ -349,21 +435,21 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getStorageCap: (state) => (id) => {
-      let item = state.data[id];
+      const item = state.data[id];
       return item.storage * state.storageExcess;
     },
     /*--------------------------------------------------------------------*/
     getStatuesCount(state) {
       let statuesCount = 0;
-      for (let i in state.stars) {
-        let star = state.stars[i];
+      for (const i in state.stars) {
+        const star = state.stars[i];
         if (star.subStatus == "statued") statuesCount += 1;
       }
       return statuesCount;
     },
     /*--------------------------------------------------------------------*/
     getCurrentTitan(state) {
-      let list = [];
+      const list = [];
       state.resources.forEach((item) => {
         if (item.titan == true) list.push(item.id);
       });
@@ -371,7 +457,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     getNotCurrentTitan(state) {
-      let list = [];
+      const list = [];
       state.resources.forEach((item) => {
         if (item.titan == false) list.push(item.id);
       });
@@ -380,8 +466,8 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     getOwnedStarCount(state) {
       let ownedStarCount = 0;
-      for (let i in state.stars) {
-        let star = state.stars[i];
+      for (const i in state.stars) {
+        const star = state.stars[i];
         if (star.status == "owned") ownedStarCount += 1;
       }
       return ownedStarCount;
@@ -449,7 +535,7 @@ export const store = createStore({
     setActivePane(state, payload) {
       state.activePane = payload;
 
-      let index = state.notifications.indexOf(payload);
+      const index = state.notifications.indexOf(payload);
       if (index > -1) state.notifications.splice(index, 1);
     },
     /*--------------------------------------------------------------------*/
@@ -492,11 +578,11 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     computeStorage(state, id) {
-      let item = state.data[id];
+      const item = state.data[id];
       item.storage = item.baseStorage;
 
-      for (let i in state.data) {
-        let building = state.data[i];
+      for (const i in state.data) {
+        const building = state.data[i];
         if (
           "storage" in building &&
           building.storage.id == id &&
@@ -517,7 +603,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     computeCosts(state, id) {
-      let item = state.data[id];
+      const item = state.data[id];
       item.costs = JSON.parse(JSON.stringify(item.baseCosts));
 
       item.costs.forEach((cost) => {
@@ -560,11 +646,11 @@ export const store = createStore({
       let total = 0,
         activeTotal = 0;
 
-      let stats = { power: 0, defense: 0, speed: 0 };
-      let activeStats = { power: 0, defense: 0, speed: 0 };
+      const stats = { power: 0, defense: 0, speed: 0 };
+      const activeStats = { power: 0, defense: 0, speed: 0 };
 
-      for (let i in state.ships) {
-        var item = state.ships[i];
+      for (const i in state.ships) {
+        const item = state.ships[i];
 
         stats.power += item.stats.power * item.count;
         stats.defense += item.stats.defense * item.count;
@@ -585,7 +671,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     toggleCollapsed(state, id) {
-      let index = state.collapsed.indexOf(id);
+      const index = state.collapsed.indexOf(id);
       if (index >= 0) state.collapsed.splice(index, 1);
       else state.collapsed.push(id);
     },
@@ -609,1129 +695,7 @@ export const store = createStore({
     // STARTING
     /*--------------------------------------------------------------------*/
     initialize({ state }) {
-      // RESOURCE ACHIEVEMENTS
-      /*----------------------------------------------------------------*/
-      state.data["achMeteorite"] = {
-        id: "achMeteorite",
-        icon: "meteorite.png",
-        data: "meteorite",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achCarbon"] = {
-        id: "achCarbon",
-        icon: "carbon.png",
-        data: "carbon",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achOil"] = {
-        id: "achOil",
-        icon: "oil.png",
-        data: "oil",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achMetal"] = {
-        id: "achMetal",
-        icon: "metal.png",
-        data: "metal",
-        unlocked: true,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achGem"] = {
-        id: "achGem",
-        icon: "gem.png",
-        data: "gem",
-        unlocked: true,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achWood"] = {
-        id: "achWood",
-        icon: "wood.png",
-        data: "wood",
-        unlocked: true,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achSilicon"] = {
-        id: "achSilicon",
-        icon: "silicon.png",
-        data: "silicon",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achUranium"] = {
-        id: "achUranium",
-        icon: "uranium.png",
-        data: "uranium",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achLava"] = {
-        id: "achLava",
-        icon: "lava.png",
-        data: "lava",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achLunarite"] = {
-        id: "achLunarite",
-        icon: "lunarite.png",
-        data: "lunarite",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achMethane"] = {
-        id: "achMethane",
-        icon: "methane.png",
-        data: "methane",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achTitanium"] = {
-        id: "achTitanium",
-        icon: "titanium.png",
-        data: "titanium",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achGold"] = {
-        id: "achGold",
-        icon: "gold.png",
-        data: "gold",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achSilver"] = {
-        id: "achSilver",
-        icon: "silver.png",
-        data: "silver",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achHydrogen"] = {
-        id: "achHydrogen",
-        icon: "hydrogen.png",
-        data: "hydrogen",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achHelium"] = {
-        id: "achHelium",
-        icon: "helium.png",
-        data: "helium",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achIce"] = {
-        id: "achIce",
-        icon: "ice.png",
-        data: "ice",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achScience"] = {
-        id: "achScience",
-        icon: "science.png",
-        data: "science",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      state.data["achFuel"] = {
-        id: "achFuel",
-        icon: "fuel.png",
-        data: "fuel",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [50, 50000, 50000000, 50000000000, 50000000000000],
-      };
-      /*----------------------------------------------------------------*/
-
-      // PRODUCER ACHIEVEMENTS
-      /*----------------------------------------------------------------*/
-      state.data["achEnergyT1"] = {
-        id: "achEnergyT1",
-        icon: "energy.png",
-        data: "energyT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achEnergyT2"] = {
-        id: "achEnergyT2",
-        icon: "energy.png",
-        data: "energyT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achEnergyT3"] = {
-        id: "achEnergyT3",
-        icon: "energy.png",
-        data: "energyT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achEnergyT4"] = {
-        id: "achEnergyT4",
-        icon: "energy.png",
-        data: "energyT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achEnergyT5"] = {
-        id: "achEnergyT5",
-        icon: "energy.png",
-        data: "energyT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achEnergyT6"] = {
-        id: "achEnergyT6",
-        icon: "energy.png",
-        data: "energyT6",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achPlasmaT1"] = {
-        id: "achPlasmaT1",
-        icon: "plasma.png",
-        data: "plasmaT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achPlasmaT2"] = {
-        id: "achPlasmaT2",
-        icon: "plasma.png",
-        data: "plasmaT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achPlasmaT3"] = {
-        id: "achPlasmaT3",
-        icon: "plasma.png",
-        data: "plasmaT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achPlasmaT4"] = {
-        id: "achPlasmaT4",
-        icon: "plasma.png",
-        data: "plasmaT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMeteoriteT1"] = {
-        id: "achMeteoriteT1",
-        icon: "meteorite.png",
-        data: "meteoriteT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMeteoriteT2"] = {
-        id: "achMeteoriteT2",
-        icon: "meteorite.png",
-        data: "meteoriteT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMeteoriteT3"] = {
-        id: "achMeteoriteT3",
-        icon: "meteorite.png",
-        data: "meteoriteT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMeteoriteT4"] = {
-        id: "achMeteoriteT4",
-        icon: "meteorite.png",
-        data: "meteoriteT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achCarbonT1"] = {
-        id: "achCarbonT1",
-        icon: "carbon.png",
-        data: "carbonT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achCarbonT2"] = {
-        id: "achCarbonT2",
-        icon: "carbon.png",
-        data: "carbonT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achCarbonT3"] = {
-        id: "achCarbonT3",
-        icon: "carbon.png",
-        data: "carbonT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achCarbonT4"] = {
-        id: "achCarbonT4",
-        icon: "carbon.png",
-        data: "carbonT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achCarbonT5"] = {
-        id: "achCarbonT5",
-        icon: "carbon.png",
-        data: "carbonT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achOilT1"] = {
-        id: "achOilT1",
-        icon: "oil.png",
-        data: "oilT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achOilT2"] = {
-        id: "achOilT2",
-        icon: "oil.png",
-        data: "oilT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achOilT3"] = {
-        id: "achOilT3",
-        icon: "oil.png",
-        data: "oilT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achOilT4"] = {
-        id: "achOilT4",
-        icon: "oil.png",
-        data: "oilT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achOilT5"] = {
-        id: "achOilT5",
-        icon: "oil.png",
-        data: "oilT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMetalT1"] = {
-        id: "achMetalT1",
-        icon: "metal.png",
-        data: "metalT1",
-        unlocked: true,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMetalT2"] = {
-        id: "achMetalT2",
-        icon: "metal.png",
-        data: "metalT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMetalT3"] = {
-        id: "achMetalT3",
-        icon: "metal.png",
-        data: "metalT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMetalT4"] = {
-        id: "achMetalT4",
-        icon: "metal.png",
-        data: "metalT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMetalT5"] = {
-        id: "achMetalT5",
-        icon: "metal.png",
-        data: "metalT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGemT1"] = {
-        id: "achGemT1",
-        icon: "gem.png",
-        data: "gemT1",
-        unlocked: true,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGemT2"] = {
-        id: "achGemT2",
-        icon: "gem.png",
-        data: "gemT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGemT3"] = {
-        id: "achGemT3",
-        icon: "gem.png",
-        data: "gemT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGemT4"] = {
-        id: "achGemT4",
-        icon: "gem.png",
-        data: "gemT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGemT5"] = {
-        id: "achGemT5",
-        icon: "gem.png",
-        data: "gemT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achWoodT1"] = {
-        id: "achWoodT1",
-        icon: "wood.png",
-        data: "woodT1",
-        unlocked: true,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achWoodT2"] = {
-        id: "achWoodT2",
-        icon: "wood.png",
-        data: "woodT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achWoodT3"] = {
-        id: "achWoodT3",
-        icon: "wood.png",
-        data: "woodT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achWoodT4"] = {
-        id: "achWoodT4",
-        icon: "wood.png",
-        data: "woodT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achWoodT5"] = {
-        id: "achWoodT5",
-        icon: "wood.png",
-        data: "woodT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSiliconT1"] = {
-        id: "achSiliconT1",
-        icon: "silicon.png",
-        data: "siliconT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSiliconT2"] = {
-        id: "achSiliconT2",
-        icon: "silicon.png",
-        data: "siliconT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSiliconT3"] = {
-        id: "achSiliconT3",
-        icon: "silicon.png",
-        data: "siliconT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSiliconT4"] = {
-        id: "achSiliconT4",
-        icon: "silicon.png",
-        data: "siliconT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSiliconT5"] = {
-        id: "achSiliconT5",
-        icon: "silicon.png",
-        data: "siliconT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achUraniumT1"] = {
-        id: "achUraniumT1",
-        icon: "uranium.png",
-        data: "uraniumT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achUraniumT2"] = {
-        id: "achUraniumT2",
-        icon: "uranium.png",
-        data: "uraniumT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achUraniumT3"] = {
-        id: "achUraniumT3",
-        icon: "uranium.png",
-        data: "uraniumT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achUraniumT4"] = {
-        id: "achUraniumT4",
-        icon: "uranium.png",
-        data: "uraniumT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achUraniumT5"] = {
-        id: "achUraniumT5",
-        icon: "uranium.png",
-        data: "uraniumT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLavaT1"] = {
-        id: "achLavaT1",
-        icon: "lava.png",
-        data: "lavaT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLavaT2"] = {
-        id: "achLavaT2",
-        icon: "lava.png",
-        data: "lavaT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLavaT3"] = {
-        id: "achLavaT3",
-        icon: "lava.png",
-        data: "lavaT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLavaT4"] = {
-        id: "achLavaT4",
-        icon: "lava.png",
-        data: "lavaT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLavaT5"] = {
-        id: "achLavaT5",
-        icon: "lava.png",
-        data: "lavaT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLunariteT1"] = {
-        id: "achLunariteT1",
-        icon: "lunarite.png",
-        data: "lunariteT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLunariteT2"] = {
-        id: "achLunariteT2",
-        icon: "lunarite.png",
-        data: "lunariteT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLunariteT3"] = {
-        id: "achLunariteT3",
-        icon: "lunarite.png",
-        data: "lunariteT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLunariteT4"] = {
-        id: "achLunariteT4",
-        icon: "lunarite.png",
-        data: "lunariteT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achLunariteT5"] = {
-        id: "achLunariteT5",
-        icon: "lunarite.png",
-        data: "lunariteT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMethaneT1"] = {
-        id: "achMethaneT1",
-        icon: "methane.png",
-        data: "methaneT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMethaneT2"] = {
-        id: "achMethaneT2",
-        icon: "methane.png",
-        data: "methaneT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMethaneT3"] = {
-        id: "achMethaneT3",
-        icon: "methane.png",
-        data: "methaneT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMethaneT4"] = {
-        id: "achMethaneT4",
-        icon: "methane.png",
-        data: "methaneT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achMethaneT5"] = {
-        id: "achMethaneT5",
-        icon: "methane.png",
-        data: "methaneT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achTitaniumT1"] = {
-        id: "achTitaniumT1",
-        icon: "titanium.png",
-        data: "titaniumT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achTitaniumT2"] = {
-        id: "achTitaniumT2",
-        icon: "titanium.png",
-        data: "titaniumT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achTitaniumT3"] = {
-        id: "achTitaniumT3",
-        icon: "titanium.png",
-        data: "titaniumT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achTitaniumT4"] = {
-        id: "achTitaniumT4",
-        icon: "titanium.png",
-        data: "titaniumT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achTitaniumT5"] = {
-        id: "achTitaniumT5",
-        icon: "titanium.png",
-        data: "titaniumT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGoldT1"] = {
-        id: "achGoldT1",
-        icon: "gold.png",
-        data: "goldT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGoldT2"] = {
-        id: "achGoldT2",
-        icon: "gold.png",
-        data: "goldT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGoldT3"] = {
-        id: "achGoldT3",
-        icon: "gold.png",
-        data: "goldT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGoldT4"] = {
-        id: "achGoldT4",
-        icon: "gold.png",
-        data: "goldT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achGoldT5"] = {
-        id: "achGoldT5",
-        icon: "gold.png",
-        data: "goldT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSilverT1"] = {
-        id: "achSilverT1",
-        icon: "silver.png",
-        data: "silverT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSilverT2"] = {
-        id: "achSilverT2",
-        icon: "silver.png",
-        data: "silverT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSilverT3"] = {
-        id: "achSilverT3",
-        icon: "silver.png",
-        data: "silverT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSilverT4"] = {
-        id: "achSilverT4",
-        icon: "silver.png",
-        data: "silverT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achSilverT5"] = {
-        id: "achSilverT5",
-        icon: "silver.png",
-        data: "silverT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHydrogenT1"] = {
-        id: "achHydrogenT1",
-        icon: "hydrogen.png",
-        data: "hydrogenT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHydrogenT2"] = {
-        id: "achHydrogenT2",
-        icon: "hydrogen.png",
-        data: "hydrogenT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHydrogenT3"] = {
-        id: "achHydrogenT3",
-        icon: "hydrogen.png",
-        data: "hydrogenT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHydrogenT4"] = {
-        id: "achHydrogenT4",
-        icon: "hydrogen.png",
-        data: "hydrogenT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHydrogenT5"] = {
-        id: "achHydrogenT5",
-        icon: "hydrogen.png",
-        data: "hydrogenT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHeliumT1"] = {
-        id: "achHeliumT1",
-        icon: "helium.png",
-        data: "heliumT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHeliumT2"] = {
-        id: "achHeliumT2",
-        icon: "helium.png",
-        data: "heliumT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHeliumT3"] = {
-        id: "achHeliumT3",
-        icon: "helium.png",
-        data: "heliumT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHeliumT4"] = {
-        id: "achHeliumT4",
-        icon: "helium.png",
-        data: "heliumT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achHeliumT5"] = {
-        id: "achHeliumT5",
-        icon: "helium.png",
-        data: "heliumT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achIceT1"] = {
-        id: "achIceT1",
-        icon: "ice.png",
-        data: "iceT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achIceT2"] = {
-        id: "achIceT2",
-        icon: "ice.png",
-        data: "iceT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achIceT3"] = {
-        id: "achIceT3",
-        icon: "ice.png",
-        data: "iceT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achIceT4"] = {
-        id: "achIceT4",
-        icon: "ice.png",
-        data: "iceT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achIceT5"] = {
-        id: "achIceT5",
-        icon: "ice.png",
-        data: "iceT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achScienceT1"] = {
-        id: "achScienceT1",
-        icon: "science.png",
-        data: "scienceT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achScienceT2"] = {
-        id: "achScienceT2",
-        icon: "science.png",
-        data: "scienceT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achScienceT3"] = {
-        id: "achScienceT3",
-        icon: "science.png",
-        data: "scienceT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achScienceT4"] = {
-        id: "achScienceT4",
-        icon: "science.png",
-        data: "scienceT4",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achScienceT5"] = {
-        id: "achScienceT5",
-        icon: "science.png",
-        data: "scienceT5",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achFuelT1"] = {
-        id: "achFuelT1",
-        icon: "fuel.png",
-        data: "fuelT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achFuelT2"] = {
-        id: "achFuelT2",
-        icon: "fuel.png",
-        data: "fuelT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achFuelT3"] = {
-        id: "achFuelT3",
-        icon: "fuel.png",
-        data: "fuelT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achDysonT1"] = {
-        id: "achDysonT1",
-        icon: "dyson.png",
-        data: "dysonT1",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achDysonT2"] = {
-        id: "achDysonT2",
-        icon: "dyson.png",
-        data: "dysonT2",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      state.data["achDysonT3"] = {
-        id: "achDysonT3",
-        icon: "dyson.png",
-        data: "dysonT3",
-        unlocked: false,
-        count: 0,
-        progress: 0,
-        brackets: [5, 25, 75, 150, 250],
-      };
-      /*----------------------------------------------------------------*/
+      state.data = { ...state.data, ...achs, ...producerAchs };
 
       // ENERGY
       /*----------------------------------------------------------------*/
@@ -12352,8 +11316,8 @@ export const store = createStore({
       ];
 
       /*----------------------------------------------------------------*/
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if ("resource1" in item && "resource2" in item) {
           if (item.resource1 == item.resource2) console.log(item);
 
@@ -12368,9 +11332,9 @@ export const store = createStore({
     // LOADING / SAVING
     /*--------------------------------------------------------------------*/
     load({ state, commit, dispatch }) {
-      var data = localStorage.getItem("ngsavecrypted");
+      let data = localStorage.getItem("ngsavecrypted");
       if (data && data !== null && data.length % 4 == 0) {
-        let text = LZString.decompressFromBase64(data);
+        const text = LZString.decompressFromBase64(data);
         if (!text) return console.warn("Load failed");
 
         data = JSON.parse(text);
@@ -12415,8 +11379,8 @@ export const store = createStore({
           if (!state.stats.allTimeUltrite) state.stats.allTimeUltrite = 0;
         }
 
-        for (let i in data.entries) {
-          let item = data.entries[i];
+        for (const i in data.entries) {
+          const item = data.entries[i];
 
           if ("unlocked" in item) state.data[i].unlocked = item.unlocked;
           if ("count" in item) state.data[i].count = item.count;
@@ -12502,8 +11466,8 @@ export const store = createStore({
 
       let ownedStarCount = 0;
 
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if ("count" in item && item.count > 0) {
           if ("unlocks" in item)
             item.unlocks.forEach((unlock) => {
@@ -12567,7 +11531,7 @@ export const store = createStore({
       }
 
       if (state.data["darkmatter"].unlocked == true) {
-        let list = [
+        const list = [
           "carnelian",
           "upgradeGain",
           "upgradeStorage1",
@@ -12618,7 +11582,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     save({ state }) {
-      let saveddata = {
+      const saveddata = {
         version: state.version,
         locale: state.locale,
         activePane: state.activePane,
@@ -12638,6 +11602,7 @@ export const store = createStore({
         autoEmcInterval: state.autoEmcInterval,
         displayEmcShortcut: state.displayEmcShortcut,
         displayNanoswarmShortcut: state.displayNanoswarmShortcut,
+        saveToCloud: state.saveToCloud,
         stats: state.stats,
         collapsed: state.collapsed,
         pinned: state.pinned,
@@ -12646,8 +11611,8 @@ export const store = createStore({
         entries: {},
       };
 
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if (
           item.unlocked == true ||
           ("titan" in item && item.titan == true) ||
@@ -12680,8 +11645,8 @@ export const store = createStore({
         }
       }
 
-      let text = JSON.stringify(saveddata);
-      let compressed = LZString.compressToBase64(text);
+      const text = JSON.stringify(saveddata);
+      const compressed = LZString.compressToBase64(text);
       localStorage.setItem("ngsavecrypted", compressed);
     },
     /*--------------------------------------------------------------------*/
@@ -12689,14 +11654,14 @@ export const store = createStore({
     // GAME LOOP
     /*--------------------------------------------------------------------*/
     computeProdValues({ state, commit }) {
-      let temp = {};
+      const temp = {};
       state.resources.forEach((item) => {
         item.problem = false;
         temp[item.id] = { prod: 0, boost: 0, consumption: 0, production: 0 };
       });
 
       let prodBoost = 0;
-      item = state.data["boostProduction"];
+      let item = state.data["boostProduction"];
       if (item.unlocked && item.count > 0) {
         prodBoost += 0.01 * item.count;
       }
@@ -12817,7 +11782,7 @@ export const store = createStore({
         }
       });
 
-      let item = state.data["nanoswarm"];
+      item = state.data["nanoswarm"];
       if (item.unlocked && item.count > 0 && item.resource != null) {
         temp[item.resource].production *= Math.pow(1.0718, item.count);
       }
@@ -12861,8 +11826,8 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     updateTimers({ state }) {
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if (item.unlocked) {
           let modStorage = 1;
           if (state.data["upgradeStorage3"].count > 0) modStorage = 10;
@@ -12945,7 +11910,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     checkBoosts({ state, dispatch }) {
-      let science = state.data["science"];
+      const science = state.data["science"];
 
       Array.from([
         "boostProduction",
@@ -12953,7 +11918,7 @@ export const store = createStore({
         "boostEnergy",
         "boostEnergyStorage",
       ]).forEach((id) => {
-        let item = state.data[id];
+        const item = state.data[id];
         if (
           item.unlocked == false &&
           (item.count > 0 || science.count >= item.costs[0].count)
@@ -12968,7 +11933,7 @@ export const store = createStore({
       let totalAchieved = 0;
       state.achievements.forEach((item) => {
         if (item.count < item.brackets.length) {
-          let limit = item.brackets[item.count];
+          const limit = item.brackets[item.count];
           if (item.count === 0) {
             item.progress = (100 * state.data[item.data].count) / limit;
           } else {
@@ -13047,7 +12012,7 @@ export const store = createStore({
     // INTERNAL
     /*--------------------------------------------------------------------*/
     unlock({ state, commit }, id) {
-      let item = state.data[id];
+      const item = state.data[id];
       if ("unlocked" in item && item.unlocked != true) {
         item.unlocked = true;
 
@@ -13061,9 +12026,9 @@ export const store = createStore({
     onBuild({ state, commit, dispatch, getters }, id) {
       /*----------------------------------------------------------------*/
       if (id == "upgradeTier2") {
-        let list = ["oil", "metal", "gem", "carbon", "wood"];
+        const list = ["oil", "metal", "gem", "carbon", "wood"];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i] + "T2"];
+          const item = state.data[list[i] + "T2"];
           item.outputs.forEach((output) => {
             output.count *= 2;
           });
@@ -13084,7 +12049,7 @@ export const store = createStore({
       } else if (id == "techTier5") {
         /*----------------------------------------------------------------*/
         if (state.data["wonderMeteorite1"].count > 0) {
-          let list = [
+          const list = [
             "carbonT5",
             "achCarbonT5",
             "oilT5",
@@ -13125,7 +12090,7 @@ export const store = createStore({
       } else if (id == "wonderMeteorite1") {
         /*----------------------------------------------------------------*/
         if (state.data["techTier5"].count > 0) {
-          let list = [
+          const list = [
             "carbonT5",
             "achCarbonT5",
             "oilT5",
@@ -13166,15 +12131,15 @@ export const store = createStore({
       } else if (id == "upgradeGain") {
         /*----------------------------------------------------------------*/
         for (let i = 0; i < state.resources.length; i++) {
-          let item = state.resources[i];
+          const item = state.resources[i];
           if ("gain" in item) {
             item.gain = 20;
           }
         }
       } else if (id == "upgradeStorage1") {
         /*----------------------------------------------------------------*/
-        for (let i in state.data) {
-          let item = state.data[i];
+        for (const i in state.data) {
+          const item = state.data[i];
           if (
             "storage" in item &&
             "baseCosts" in item &&
@@ -13190,8 +12155,8 @@ export const store = createStore({
       } else if (id == "upgradeStorage2") {
         /*----------------------------------------------------------------*/
         state.storagePrice -= 0.25;
-        for (let i in state.data) {
-          let item = state.data[i];
+        for (const i in state.data) {
+          const item = state.data[i];
           if (
             "storage" in item &&
             "baseCosts" in item &&
@@ -13204,14 +12169,14 @@ export const store = createStore({
         state.storageExcess = 10;
       } else if (id == "upgradeWonder1") {
         /*----------------------------------------------------------------*/
-        let list = [
+        const list = [
           "wonderPrecious1",
           "wonderEnergetic1",
           "wonderTechnological1",
           "wonderMeteorite1",
         ];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.baseCosts.forEach((cost) => {
             cost.count *= 0.85;
           });
@@ -13219,7 +12184,7 @@ export const store = createStore({
         }
       } else if (id == "upgradeWonder2") {
         /*----------------------------------------------------------------*/
-        let list = [
+        const list = [
           "wonderComm",
           "wonderSpaceship",
           "wonderAntimatter",
@@ -13227,7 +12192,7 @@ export const store = createStore({
           "wonderStargate",
         ];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.baseCosts.forEach((cost) => {
             cost.count *= 0.8;
           });
@@ -13235,14 +12200,14 @@ export const store = createStore({
         }
       } else if (id == "upgradeWonder3") {
         /*----------------------------------------------------------------*/
-        let list = [
+        const list = [
           "wonderPrecious0",
           "wonderEnergetic0",
           "wonderTechnological0",
           "wonderMeteorite0",
         ];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           if (item.count < 1) {
             item.count = 1;
             if ("unlocks" in item)
@@ -13253,7 +12218,7 @@ export const store = createStore({
         }
       } else if (id == "upgradeScience1") {
         /*----------------------------------------------------------------*/
-        let item = state.data["scienceT1"];
+        const item = state.data["scienceT1"];
         if (item.count < 20) {
           item.count = 20;
           item.active = 20;
@@ -13261,18 +12226,18 @@ export const store = createStore({
         }
       } else if (id == "upgradeScience2") {
         /*----------------------------------------------------------------*/
-        let item = state.data["scienceT2"];
+        const item = state.data["scienceT2"];
         item.baseCosts.forEach((cost) => {
           cost.count *= 0.8;
         });
         commit("computeCosts", item.id);
       } else if (id == "upgradeEnergyBoost") {
         /*----------------------------------------------------------------*/
-        let item = state.data["boostEnergy"];
+        const item = state.data["boostEnergy"];
         item.max += 25;
       } else if (id == "upgradeTier1") {
         /*----------------------------------------------------------------*/
-        let list = [
+        const list = [
           "energyT1",
           "plasmaT1",
           "meteoriteT1",
@@ -13294,7 +12259,7 @@ export const store = createStore({
           "iceT1",
         ];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.baseCosts.forEach((cost) => {
             cost.count *= 0.9;
           });
@@ -13307,9 +12272,9 @@ export const store = createStore({
         });
       } else if (id == "upgradeSpaceship") {
         /*----------------------------------------------------------------*/
-        let list = ["shield", "engine", "aero"];
+        const list = ["shield", "engine", "aero"];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.baseCosts.forEach((cost) => {
             cost.count *= 0.65;
           });
@@ -13317,13 +12282,13 @@ export const store = createStore({
         }
       } else if (id == "upgradeFaction") {
         /*----------------------------------------------------------------*/
-        let upgrade = state.data[id];
+        const upgrade = state.data[id];
         if (
           upgrade.count <= 1 ||
           (upgrade.count == 2 && getters.getULStars <= 0)
         ) {
           upgrade.count = 3;
-          let list = [
+          const list = [
             "carnelian",
             "prasnian",
             "hyacinite",
@@ -13331,15 +12296,15 @@ export const store = createStore({
             "moviton",
           ];
           for (let i = 0; i < list.length; i++) {
-            let item = state.data[list[i]];
+            const item = state.data[list[i]];
             item.opinion += 20;
           }
         }
       } else if (id == "advUpgradeStorage1") {
         /*----------------------------------------------------------------*/
         state.storagePrice -= 0.25;
-        for (let i in state.data) {
-          let item = state.data[i];
+        for (const i in state.data) {
+          const item = state.data[i];
           if (
             "storage" in item &&
             "baseCosts" in item &&
@@ -13349,34 +12314,34 @@ export const store = createStore({
         }
       } else if (id == "shipSpeedEnhancement") {
         /*----------------------------------------------------------------*/
-        let list = ["shipT1", "shipT2", "shipT3", "shipT4", "shipT5"];
+        const list = ["shipT1", "shipT2", "shipT3", "shipT4", "shipT5"];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.stats.speed *= 2;
           commit("computeFleetStats");
         }
       } else if (id == "shipDefenceEnhancement") {
         /*----------------------------------------------------------------*/
-        let list = ["shipT1", "shipT2", "shipT3", "shipT4", "shipT5"];
+        const list = ["shipT1", "shipT2", "shipT3", "shipT4", "shipT5"];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.stats.defense *= 2;
           commit("computeFleetStats");
         }
       } else if (id == "shipPowerEnhancement") {
         /*----------------------------------------------------------------*/
-        let list = ["shipT1", "shipT2", "shipT3", "shipT4", "shipT5"];
+        const list = ["shipT1", "shipT2", "shipT3", "shipT4", "shipT5"];
         for (let i = 0; i < list.length; i++) {
-          let item = state.data[list[i]];
+          const item = state.data[list[i]];
           item.stats.power *= 2;
           commit("computeFleetStats");
         }
       } else if (id == "radarT1" || id == "radarT2") {
         /*----------------------------------------------------------------*/
-        let radius =
+        const radius =
           state.data["radarT2"].count + state.data["radarT1"].count * 5;
-        for (let i in state.stars) {
-          let star = state.stars[i];
+        for (const i in state.stars) {
+          const star = state.stars[i];
           if (star.unlocked == false && star.distance <= radius)
             dispatch("unlock", star.id);
         }
@@ -13397,8 +12362,8 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     checkUltrite({ state, dispatch }) {
       let ownedStarCount = 0;
-      for (let i in state.stars) {
-        let star = state.stars[i];
+      for (const i in state.stars) {
+        const star = state.stars[i];
         if (star.status == "owned") ownedStarCount += 1;
       }
 
@@ -13418,7 +12383,7 @@ export const store = createStore({
     // USER ACTIONS
     /*--------------------------------------------------------------------*/
     gain({ state }, id) {
-      let item = state.data[id];
+      const item = state.data[id];
       if ("gain" in item) {
         for (let i = 0; i < item.gain; i++) {
           let canGain = true;
@@ -13457,7 +12422,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     toggle({ state }, id) {
-      let item = state.data[id];
+      const item = state.data[id];
       if ("toggle" in item) {
         if (item.toggle == "on") item.toggle = "off";
         else if (item.toggle == "off") item.toggle = "on";
@@ -13465,12 +12430,12 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     build({ state, dispatch, commit }, payload) {
-      let id = payload.id;
+      const id = payload.id;
       let count = payload.count || 1;
 
-      let item = state.data[id];
+      const item = state.data[id];
 
-      let upto = payload.upto;
+      const upto = payload.upto;
       if (upto) count = upto - item.count;
 
       for (let i = 0; i < count; i++) {
@@ -13544,10 +12509,10 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     destroy({ state, commit }, payload) {
-      let id = payload.id;
-      let count = payload.count || 1;
+      const id = payload.id;
+      const count = payload.count || 1;
 
-      let item = state.data[id];
+      const item = state.data[id];
       for (let i = 0; i < (count || 1); i++) {
         let canDestroy = true;
 
@@ -13569,7 +12534,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     convert({ state, getters }, id) {
-      let item = state.data[id];
+      const item = state.data[id];
 
       let amount;
       if (state.emcAmount == "max")
@@ -13587,7 +12552,7 @@ export const store = createStore({
           getters.getStorageCap(item.resource) - state.data[item.resource].count
         );
 
-      let required = amount * item.rate;
+      const required = amount * item.rate;
 
       if (amount > 0 && state.data[item.source].count >= required) {
         state.data[item.source].count -= required;
@@ -13600,10 +12565,10 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     setActiveShip({ state, commit }, payload) {
-      let id = payload.id;
-      let count = payload.count;
+      const id = payload.id;
+      const count = payload.count;
 
-      let item = state.data[id];
+      const item = state.data[id];
 
       if (count == "max") item.active = item.count;
       else if (count == "none") item.active = 0;
@@ -13615,15 +12580,15 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     spy({ state, commit, getters }, id) {
       let result = false;
-      let star = state.data[id];
+      const star = state.data[id];
 
-      let chance = getters.getSpyChance(id) / 100;
-      let roll = Math.random();
+      const chance = getters.getSpyChance(id) / 100;
+      const roll = Math.random();
       if (chance >= roll) {
         star.spy += 1;
         result = true;
       } else {
-        let scout = state.data["shipT1"];
+        const scout = state.data["shipT1"];
         scout.count -= scout.active;
         scout.active = 0;
 
@@ -13636,12 +12601,12 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     invade({ state, getters, dispatch, commit }, id) {
-      let activeFleet = state.activeFleet;
+      const activeFleet = state.activeFleet;
       if (activeFleet.power != 0) {
-        let star = state.data[id];
+        const star = state.data[id];
         let result = false;
 
-        let chance = getters.getInvadeChance(id);
+        const chance = getters.getInvadeChance(id);
         if (chance == "peace") {
           dispatch("absorbStar", id).then((res) => {
             return res;
@@ -13649,7 +12614,7 @@ export const store = createStore({
           return;
         }
 
-        let roll = Math.random();
+        const roll = Math.random();
         if (chance >= roll) {
           result = true;
           star.status = "owned";
@@ -13659,12 +12624,12 @@ export const store = createStore({
           state.stats.starOwned.current += 1;
           state.stats.starOwned.allTime += 1;
 
-          let random = Math.random() * chance;
+          const random = Math.random() * chance;
           if (random < 1) {
-            for (let i in state.ships) {
-              let item = state.ships[i];
+            for (const i in state.ships) {
+              const item = state.ships[i];
               for (let j = 0; j < item.active; j++) {
-                let destroyChance = Math.random();
+                const destroyChance = Math.random();
                 if (destroyChance > chance) {
                   item.count -= 1;
                   item.active -= 1;
@@ -13675,13 +12640,13 @@ export const store = createStore({
             }
           }
 
-          var faction = state.data[star.faction];
+          const faction = state.data[star.faction];
           faction.opinion -= 10;
 
           dispatch("checkUltrite");
         } else {
-          for (let i in state.ships) {
-            let item = state.ships[i];
+          for (const i in state.ships) {
+            const item = state.ships[i];
             item.count -= item.active;
             item.active = 0;
 
@@ -13696,8 +12661,8 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     absorb({ state, dispatch }, id) {
-      let star = state.data[id];
-      let faction = state.data[star.faction];
+      const star = state.data[id];
+      const faction = state.data[star.faction];
       if (faction.opinion >= 60) {
         faction.opinion -= 5;
         star.status = "owned";
@@ -13730,7 +12695,7 @@ export const store = createStore({
       state.displayEmcShortcut = false;
       state.displayNanoswarmShortcut = false;
 
-      let exludedList = [
+      const exludedList = [
         "darkmatter",
         "carnelian",
         "upgradeGain",
@@ -13776,8 +12741,8 @@ export const store = createStore({
         "techAutoStorageUpgrade",
       ];
 
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if (!exludedList.includes(i)) {
           if ("unlocked" in item) item.unlocked = false;
           if ("count" in item) item.count = 0;
@@ -13868,7 +12833,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     rebirthFaction({ state }, payload) {
-      let faction = state.data[payload.id];
+      const faction = state.data[payload.id];
       faction.opinion = 0;
 
       payload.items.forEach((id) => {
@@ -13878,8 +12843,8 @@ export const store = createStore({
     /*--------------------------------------------------------------------*/
     enlighten({ state, getters, dispatch }, payload) {
       let ownedStarCount = 0;
-      for (let i in state.stars) {
-        let star = state.stars[i];
+      for (const i in state.stars) {
+        const star = state.stars[i];
         if (star.status == "owned") ownedStarCount += 1;
       }
       if (ownedStarCount < 10) return false;
@@ -13899,7 +12864,7 @@ export const store = createStore({
       state.displayEmcShortcut = false;
       state.displayNanoswarmShortcut = false;
 
-      let exludedList = [
+      const exludedList = [
         "darkmatter",
         "carnelian",
         "upgradeGain",
@@ -13937,8 +12902,8 @@ export const store = createStore({
 
       state.data["darkmatter"].count = 0;
 
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if (!exludedList.includes(i)) {
           if ("unlocked" in item) item.unlocked = false;
           if ("count" in item) item.count = 0;
@@ -14029,7 +12994,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     check({ state, commit }, payload) {
-      let item = state.data[payload];
+      const item = state.data[payload];
 
       let canBuild = true;
 
@@ -14058,7 +13023,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     terraform({ state, commit }, payload) {
-      let item = state.data[payload];
+      const item = state.data[payload];
 
       let canBuild = true;
 
@@ -14087,7 +13052,7 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     buildStatue({ state }, payload) {
-      let item = state.data[payload];
+      const item = state.data[payload];
 
       let canBuild = true;
 
@@ -14115,8 +13080,8 @@ export const store = createStore({
     },
     /*--------------------------------------------------------------------*/
     swapTitan({ state, commit }, payload) {
-      let titanSource = payload.source;
-      let titanDestination = payload.destination;
+      const titanSource = payload.source;
+      const titanDestination = payload.destination;
 
       if (state.titanSwapingCount > 0) return;
       if (state.data[titanSource].titan == false) return;
@@ -14127,11 +13092,13 @@ export const store = createStore({
 
       state.titanSwapingCount += 1;
 
-      for (let i in state.data) {
-        let item = state.data[i];
+      for (const i in state.data) {
+        const item = state.data[i];
         if ("baseCosts" in item) commit("computeCosts", i);
       }
     },
     /*--------------------------------------------------------------------*/
   },
 });
+
+export type MainStore = ReturnType<typeof makeState>;

@@ -1,5 +1,9 @@
 <template>
-  <div class="tab-pane" :class="{ active: $root.activePane == id }">
+  <div
+    class="tab-pane"
+    :class="{ active: $root.activePane == id }"
+    v-if="$root.activePane == id"
+  >
     <div class="row row-cols-1 gy-3">
       <div class="col">
         <div class="row gx-2 gy-1 align-items-center">

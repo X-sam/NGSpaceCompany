@@ -136,6 +136,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 
 import Timer from "./Timer.vue";
+import { maxBuildable } from "@/helpers/maxBuildable";
 
 export default {
   components: {
@@ -144,27 +145,7 @@ export default {
   props: ["costs", "mod", "id", "calc"],
   computed: {
     ...mapState(["data", "displayEmcShortcut"]),
-    maxBuildable: function () {
-      let factor = 0;
-      if (this.data[this.id].costType == "EXPONENTIAL") factor = 1.1;
-      else if (this.data[this.id].costType == "DYSON") factor = 1.02;
-      else if (this.data[this.id].costType == "DOUBLE") factor = 2;
-
-      let result = 1000000;
-      this.costs.forEach((cost) => {
-        if (result == 0) return;
-
-        let max = Math.floor(
-          Math.log((this.data[cost.id].count * (factor - 1)) / cost.count + 1) /
-            Math.log(factor)
-        );
-        if (max < result) {
-          result = max;
-        }
-      });
-
-      return result;
-    },
+    maxBuildable: function(){return maxBuildable(this.data,this.costs,this.id)},
   },
   methods: {
     ...mapMutations(["setActivePane"]),

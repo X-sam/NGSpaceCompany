@@ -4734,6 +4734,7 @@ export default {
     fleet: Fleet,
     "calc-segment": CalcSegment,
     "calc-building": CalcBuilding,
+    Logo,
     "google-login": GoogleLogin,
   },
   data() {

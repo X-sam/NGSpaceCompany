@@ -4710,7 +4710,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import { Tooltip, Toast, Modal } from "bootstrap";
 
-import ghApi from "./apis/ghApi.js";
+import ghApi from "./apis/ghApi";
 
 import axios from "axios";
 import moment from "moment";

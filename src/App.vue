@@ -5,7 +5,7 @@
         <h1 class="text-light">NG Space Company</h1>
       </div>
       <div class="col text-center">
-        <Logo id="loadLogo" width="25%" height="100%" white="true" />
+        <logo id="loadLogo" width="25%" height="100%" white="true" />
       </div>
       <div class="col text-center">
         <h5 class="text-light">Reticulating Splines...</h5>
@@ -17,7 +17,7 @@
     <div id="sidebar" :class="{ open: sidebarOpen }" role="navigation">
       <top-header class="px-2">
         <div class="col-auto">
-          <Logo width="42" height="42" white="true" />
+          <logo width="42" height="42" white="true" />
         </div>
 
         <div class="col text-truncate px-0">
@@ -621,7 +621,7 @@
             >
               <i class="fas fa-fw fa-certificate text-success small"></i>
             </div>
-            <Logo width="36" height="36" white="true" />
+            <logo width="36" height="36" white="true" />
           </button>
         </div>
 
@@ -4730,7 +4730,7 @@ export default {
     fleet: Fleet,
     "calc-segment": CalcSegment,
     "calc-building": CalcBuilding,
-    Logo,
+    logo:Logo,
   },
   data() {
     return {

@@ -4730,7 +4730,7 @@ export default {
     fleet: Fleet,
     "calc-segment": CalcSegment,
     "calc-building": CalcBuilding,
-    logo:Logo,
+    logo: Logo,
   },
   data() {
     return {

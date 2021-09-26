@@ -19,5 +19,6 @@ const app = createApp(App)
   .use(store)
   .use(VueNumerals)
   .use(i18n)
-  .use(VueGtag, { config: { id: "G-7MZR4NX0GD" } })
+  .use(VueGtag, { config: { id: "G-7MZR4NX0GD" } });
+
 app.mount("#app");

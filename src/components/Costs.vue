@@ -145,7 +145,9 @@ export default {
   props: ["costs", "mod", "id", "calc"],
   computed: {
     ...mapState(["data", "displayEmcShortcut"]),
-    maxBuildable: function(){return maxBuildable(this.data,this.costs,this.id)},
+    maxBuildable: function () {
+      return maxBuildable(this.data, this.costs, this.id);
+    },
   },
   methods: {
     ...mapMutations(["setActivePane"]),

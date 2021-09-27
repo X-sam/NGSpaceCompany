@@ -12512,9 +12512,13 @@ export const store = createStore({
     },
     async buildMaxSwarms({ state, dispatch }, payload) {
       state.maxing = true;
+      const fuelCost = state.data["dysonT2"].costs.find((c) => c.id === "fuel")
+        .costs.count;
       while (
         state.maxing &&
-        maxBuildable(state.data, state.data["segment"].costs, "segment") > 100
+        maxBuildable(state.data, state.data["segment"].costs, "segment") >
+          100 &&
+        state.data["fuel"].count > fuelCost
       ) {
         await dispatch("build", { id: "segment", upto: 100 });
         await dispatch("build", { id: "dysonT2", count: 1 });

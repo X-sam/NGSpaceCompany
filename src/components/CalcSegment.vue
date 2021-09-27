@@ -93,6 +93,8 @@ import { mapState, mapGetters } from "vuex";
 
 import Timer from "./Timer.vue";
 
+import {costToX} from "@/helpers/costToXSegment";
+
 export default {
   components: {
     timer: Timer,
@@ -112,73 +114,15 @@ export default {
     },
 
     costTo50: function () {
-      return this.costToX(50);
+      return costToX(50,this.data);
     },
     costTo100: function () {
-      return this.costToX(100);
+      return costToX(100,this.data);
     },
     costTo250: function () {
-      return this.costToX(250);
+      return costToX(250,this.data);
     },
   },
-  methods: {
-    computeCost(base, n) {
-      return Math.floor((base * (1 - Math.pow(1.02, n))) / (1 - 1.02));
-    },
-    costToX(x) {
-      const getCost = (cost) =>
-        this.computeCost(cost, x) -
-        this.computeCost(cost, this.data["segment"].count);
-      let [costTitanium, costGold, costSilicon, costMeteorite, costIce] =
-        this.data["segment"].baseCosts.map(({ count }) => getCost(count));
-
-      if (this.data["titanium"].titan == true) costTitanium *= 0.1;
-      if (this.data["gold"].titan == true) costGold *= 0.1;
-      if (this.data["silicon"].titan == true) costSilicon *= 0.1;
-      if (this.data["meteorite"].titan == true) costMeteorite *= 0.1;
-      if (this.data["ice"].titan == true) costIce *= 0.1;
-
-      return {
-        titanium: {
-          count: costTitanium,
-          timer:
-            this.data["titanium"].prod > 0
-              ? (costTitanium - this.data["titanium"].count) /
-                this.data["titanium"].prod
-              : 0,
-        },
-        gold: {
-          count: costGold,
-          timer:
-            this.data["gold"].prod > 0
-              ? (costGold - this.data["gold"].count) / this.data["gold"].prod
-              : 0,
-        },
-        silicon: {
-          count: costSilicon,
-          timer:
-            this.data["silicon"].prod > 0
-              ? (costSilicon - this.data["silicon"].count) /
-                this.data["silicon"].prod
-              : 0,
-        },
-        meteorite: {
-          count: costMeteorite,
-          timer:
-            this.data["meteorite"].prod > 0
-              ? (costMeteorite - this.data["meteorite"].count) /
-                this.data["meteorite"].prod
-              : 0,
-        },
-        ice: {
-          count: costIce,
-          timer:
-            this.data["ice"].prod > 0
-              ? (costIce - this.data["ice"].count) / this.data["ice"].prod
-              : 0,
-        },
-      };
-    },
-  },
+  methods: {},
 };
 </script>

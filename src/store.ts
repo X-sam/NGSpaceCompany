@@ -3,7 +3,7 @@
 import { createStore } from "vuex";
 import LZString from "lz-string";
 
-import { maxBuildable } from "./helpers/maxBuildable";
+import { computeCost} from "./helpers/costToXSegment";
 
 /******************************************************************************/
 const pascal = function (n) {
@@ -12513,17 +12513,28 @@ export const store = createStore({
     async buildMaxSwarms({ state, dispatch }, payload) {
       state.maxing = true;
       const fuelCost = state.data["dysonT2"].costs.find((c) => c.id === "fuel")
-        .costs.count;
-      while (
-        state.maxing &&
-        maxBuildable(state.data, state.data["segment"].costs, "segment") >
-          100 &&
-        state.data["fuel"].count > fuelCost
-      ) {
-        await dispatch("build", { id: "segment", upto: 100 });
-        await dispatch("build", { id: "dysonT2", count: 1 });
-      }
-      state.maxing = false;
+        .count;
+      await dispatch("build", { id: "segment", upto: 100 });
+      await dispatch("build", { id: "dysonT2", count: 1 });
+      const costs = state.data["segment"].baseCosts.map(({ id, count }) => ({
+        id,
+        cost: computeCost(count, 100) * (state.data[id].titan==true?.1:1),
+      }));
+      //find max
+      let maxToMake = costs.reduce((acc, { id, cost }) => {
+        const max = Math.floor(state.data[id].count / cost);
+        if (max < acc) return max;
+        return acc;
+      }, Infinity);
+      if(maxToMake * fuelCost > state.data["fuel"].count) maxToMake = Math.floor(state.data["fuel"].count/fuelCost);
+
+      costs.forEach(({ id, cost }) => {
+        state.data[id].count -= maxToMake * cost;
+      });
+      state.data["dysonT2"].count += maxToMake;
+      state.stats.machineT2.current += maxToMake;
+      state.stats.machineT2.allTime += maxToMake;
+      state.maxing=false;
     },
     /*--------------------------------------------------------------------*/
     destroy({ state, commit }, payload) {

@@ -55,7 +55,7 @@
             >
           </div>
           <div class="col-auto text-end" style="width: 75px">
-            <small v-if="data[resource].prod <= 0" class="text-normal"
+            <small v-if="data[resource].prod <= 0 && (maxCount.store[resource].count > data[resource].count)" class="text-normal"
               >---</small
             >
             <small

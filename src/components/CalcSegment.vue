@@ -55,7 +55,12 @@
             >
           </div>
           <div class="col-auto text-end" style="width: 75px">
-            <small v-if="data[resource].prod <= 0 && (maxCount.store[resource].count > data[resource].count)" class="text-normal"
+            <small
+              v-if="
+                data[resource].prod <= 0 &&
+                maxCount.store[resource].count > data[resource].count
+              "
+              class="text-normal"
               >---</small
             >
             <small
@@ -93,7 +98,7 @@ import { mapState, mapGetters } from "vuex";
 
 import Timer from "./Timer.vue";
 
-import {costToX} from "@/helpers/costToXSegment";
+import { costToX } from "@/helpers/costToXSegment";
 
 export default {
   components: {
@@ -114,13 +119,13 @@ export default {
     },
 
     costTo50: function () {
-      return costToX(50,this.data);
+      return costToX(50, this.data);
     },
     costTo100: function () {
-      return costToX(100,this.data);
+      return costToX(100, this.data);
     },
     costTo250: function () {
-      return costToX(250,this.data);
+      return costToX(250, this.data);
     },
   },
   methods: {},

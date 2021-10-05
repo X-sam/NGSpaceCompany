@@ -16,7 +16,7 @@
       </div>
     </template>
     <template #default>
-      <div>
+      <div style="width: 100%; height: 100%">
         <div v-if="loaded" id="gameScreen">
           <div id="sidebar" :class="{ open: sidebarOpen }" role="navigation">
             <top-header class="px-2">
@@ -4971,28 +4971,28 @@ import { defineAsyncComponent } from "vue";
 
 const Header = defineAsyncComponent(() => import("./components/Header.vue"));
 const Content = defineAsyncComponent(() => import("./components/Content.vue"));
-const SidenavGroup = defineAsyncComponent(
-  () => import("./components/SidenavGroup.vue")
+const SidenavGroup = defineAsyncComponent(() =>
+  import("./components/SidenavGroup.vue")
 );
-const SidenavItem = defineAsyncComponent(
-  () => import("./components/SidenavItem.vue")
+const SidenavItem = defineAsyncComponent(() =>
+  import("./components/SidenavItem.vue")
 );
 const Pane = defineAsyncComponent(() => import("./components/Pane.vue"));
 const Card = defineAsyncComponent(() => import("./components/Card.vue"));
-const Resource = defineAsyncComponent(
-  () => import("./components/Resource.vue")
+const Resource = defineAsyncComponent(() =>
+  import("./components/Resource.vue")
 );
-const Buildable = defineAsyncComponent(
-  () => import("./components/Buildable.vue")
+const Buildable = defineAsyncComponent(() =>
+  import("./components/Buildable.vue")
 );
 const Emc = defineAsyncComponent(() => import("./components/Emc.vue"));
 const Star = defineAsyncComponent(() => import("./components/Star.vue"));
 const Fleet = defineAsyncComponent(() => import("./components/Fleet.vue"));
-const CalcSegment = defineAsyncComponent(
-  () => import("./components/CalcSegment.vue")
+const CalcSegment = defineAsyncComponent(() =>
+  import("./components/CalcSegment.vue")
 );
-const CalcBuilding = defineAsyncComponent(
-  () => import("./components/CalcBuilding.vue")
+const CalcBuilding = defineAsyncComponent(() =>
+  import("./components/CalcBuilding.vue")
 );
 
 import Logo from "./components/Logo.vue";

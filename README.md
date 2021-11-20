@@ -2,11 +2,15 @@
 
 Incremental space game about resource mining, interstellar exploration and system conquest
 
-This game has been made as a remake of the original game from Sparticle999. Of course I have the authorization from Sparticle999 to do it. I made this game to improve my skills in VueJS and to get knowledge about incremental games.
+This is Sam!'s Fork of v1 of NGSC. It diverges from Freddec's final changes to V1, and adds fixes, refactors, and my own ideas of additional features.
 
-These are links to everything NG Space Company outside of the game itself.
+You can play this version at https://x-sam.github.io/NGSpaceCompany/
 
-NG Site https://ngspacecompany.exileng.com
+If you wish to play offline, you can clone this repo, build it locally, and visit it in your browser.
+
+These are links to everything NG Space Company outside of the game itself:
+
+OG NG Site https://ngspacecompany.exileng.com
 
 NG Discord https://discord.gg/3UkgeeT9CV
 

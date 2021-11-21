@@ -5069,7 +5069,7 @@ export default {
       enlightenSelected: null,
       overlordModal: null,
 
-      currentRelease: "1.35.1",
+      currentRelease: "S.35.1",
       ghLatestRelease: null,
 
       login: null,
@@ -5353,7 +5353,7 @@ export default {
     },
     ghUpdate() {
       ghApi
-        .get("/repos/ExileNG/NGSpaceCompany/releases/latest")
+        .get("/repos/X-Sam/NGSpaceCompany/releases/latest")
         .then((response) => {
           this.ghLatestRelease = response.data.tag_name;
         });
